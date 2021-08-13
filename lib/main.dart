@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
 
   List<Map<String, dynamic>> _toDoList = [];
 
-  Map<String, dynamic> ?_lastRemoved;
+  Map<String, dynamic>? _lastRemoved;
   int _lastRemovedPos = 0;
 
   @override
@@ -29,7 +29,8 @@ class _HomeState extends State<Home> {
     super.initState();
 
     _readData().then((data) => setState(() {
-          _toDoList = json.decode(data!);
+          List<dynamic> a = json.decode(data!);
+          _toDoList = a.map((e) => Map<String, dynamic>.from(e)).toList();
         }));
   }
 
@@ -151,6 +152,7 @@ class _HomeState extends State<Home> {
               onPressed: () {
                 setState(() {
                   _toDoList.insert(_lastRemovedPos, _lastRemoved!);
+                  _saveData();
                 });
               },
             ),
@@ -159,7 +161,6 @@ class _HomeState extends State<Home> {
 
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(snack);
-           
         });
       },
       background: Container(
